@@ -4,11 +4,15 @@ import logging
 from scraper import scrape_medicines
 
 app = Flask(__name__)
-# Update CORS to allow requests from your future Netlify domain
-CORS(app, resources={r"/api/*": {"origins": ["https://your-netlify-app.netlify.app", "http://localhost:3000", "*"]}})
+# Allow all origins with a wildcard
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
+
+@app.route('/')
+def index():
+    return jsonify({"status": "API is running", "endpoints": ["/api/scrape"]})
 
 @app.route('/api/scrape', methods=['POST'])
 def scrape():
