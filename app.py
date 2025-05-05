@@ -6,7 +6,6 @@ from scraper import scrape_medicines
 app = Flask(__name__)
 # Allow all origins with a wildcard
 CORS(app, resources={r"/api/*": {"origins": "*"}})
-
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
