@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: medcompare-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: RENDER
+        value: "true"
+    buildpacks:
+      - url: heroku/python
+      - url: https://github.com/heroku/heroku-buildpack-google-chrome
