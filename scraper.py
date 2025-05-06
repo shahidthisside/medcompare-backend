@@ -27,15 +27,22 @@ def scrape_medicines(search_term):
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')  # Add this line
+        options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--blink-settings=imagesEnabled=false')
         options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36")
         
         # For cloud deployment
-        if 'RENDER' in os.environ:
-            options.add_argument('--disable-dev-shm-usage')  # Changed from chrome_options to options
-            options.add_argument('--remote-debugging-port=9222')  # Changed from chrome_options to options
-            return webdriver.Chrome(options=options)
+        if 'RENDER' in os.environ or os.environ.get('CLOUD_RUN', False):
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--remote-debugging-port=9222')
+            
+            # Use the ChromeDriver path from environment variable or default path
+            chromedriver_path = os.environ.get('CHROMEDRIVER_PATH', '/usr/bin/chromedriver')
+            chrome_binary = os.environ.get('CHROME_BIN', '/usr/bin/chromium')
+            
+            options.binary_location = chrome_binary
+            service = Service(executable_path=chromedriver_path)
+            return webdriver.Chrome(service=service, options=options)
         else:
             return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 

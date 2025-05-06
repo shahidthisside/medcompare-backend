@@ -1,7 +1,7 @@
 flask
 flask-cors
-selenium
 webdriver-manager
 beautifulsoup4
 lxml
 gunicorn
+selenium>=4.10.0
