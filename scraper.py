@@ -276,20 +276,29 @@ def scrape_medicines(search_term):
     formatted_term = search_term.replace(' ', '%20')
     
     # Use ThreadPoolExecutor to run scrapers in parallel
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+     # Use ThreadPoolExecutor to run scrapers in parallel
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         # Submit all scraping tasks
-        apollo_future = executor.submit(scrape_apollo, formatted_term)
-        netmeds_future = executor.submit(scrape_netmeds, formatted_term)
-        one_mg_future = executor.submit(scrape_1mg, formatted_term)
+        # apollo_future = executor.submit(scrape_apollo, formatted_term)
+        # netmeds_future = executor.submit(scrape_netmeds, formatted_term)
+        # one_mg_future = executor.submit(scrape_1mg, formatted_term)
         
-        # Get results as they complete
-        apollo_results = apollo_future.result()
-        netmeds_results = netmeds_future.result()
-        one_mg_results = one_mg_future.result()
+        # # Get results as they complete
+        # apollo_results = apollo_future.result()
+        # netmeds_results = netmeds_future.result()
+        # one_mg_results = one_mg_future.result()
+    apollo_future = scrape_apollo(formatted_term)
+    netmeds_future = scrape_netmeds(formatted_term)
+    one_mg_future = scrape_1mg(formatted_term)
+    
+    # Get results as they complete
+    # apollo_results = apollo_future.result()
+    # netmeds_results = netmeds_future.result()
+    # one_mg_results = one_mg_future.result()
 
     # --- Return Results as Dictionary ---
     return {
-        "Apollo Pharmacy": apollo_results,
-        "Netmeds": netmeds_results,
-        "1mg": one_mg_results
+        "Apollo Pharmacy": apollo_future,
+        "Netmeds": netmeds_future,
+        "1mg": one_mg_future
     }
